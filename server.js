@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-
+const helmet = require('helmet');
 
 const path = require('path');
 const server = require('http').Server(app);
@@ -26,8 +26,9 @@ mongoose.connect(url, {
 app.set('port', process.env.PORT || 8010);
 app.set('views', path.join(__dirname, 'client', 'views'));
 app.set('view engine', 'ejs');
+//app.disable('x-powered-by');
 
-
+app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
