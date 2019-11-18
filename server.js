@@ -11,6 +11,8 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const hidePoweredBy = require('hide-powered-by')
+app.use(hidePoweredBy())
 
 require('./server/config/passport')(passport);
 
@@ -52,7 +54,7 @@ require('./server/routes/routes')(app, passport);
 
 
 app.use(express.static(path.join(__dirname,'client', 'public')));
-
+app.use(hidePoweredBy({ setTo: 'PHP 4.2.0' }))
 server.listen(app.get('port'), () => {
     console.log('RED SOCIAL corriendo en http://localhost:8010/')
 });
