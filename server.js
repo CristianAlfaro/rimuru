@@ -14,6 +14,8 @@ const session = require('express-session');
 
 require('./server/config/passport')(passport);
 
+//echo "deb [arch = amd64, arm64] https://repo.mongodb.org/apt/ubuntu xenial / mongodb-org / 4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb.list
+//sudo apt install mongodb-org = 4.2.1 mongodb-org-server = 4.2.1 mongodb-org-shell = 4.2.1 mongodb-org-mongos = 4.2.1 mongodb-org-tools = 4.2.1
 
 const { url } = require('./server/config/database');
 
