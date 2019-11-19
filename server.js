@@ -14,7 +14,18 @@ const session = require('express-session');
 const hidePoweredBy = require('hide-powered-by');
 const fs = require('fs');
 const https = require('https');
+const rateLimit     = require("express-rate-limit");
 app.use(hidePoweredBy());
+
+
+const apiLimiter = rateLimit({
+    windowMs: 5 * 60 * 1000, //duración de la ventana de tiempo
+    max: 100 //peticiones por up dentro de la ventana de tiempo
+});
+app.set("trust proxy", true); //para evitar que la ip del proxy se confunda con la del cliente
+app.use("/api/", apiLimiter); // solo aplicamos el limite de peticiones a la api
+
+
 
 require('./server/config/passport')(passport);
 
