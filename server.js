@@ -11,13 +11,13 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const hidePoweredBy = require('hide-powered-by')
-app.use(hidePoweredBy())
+const hidePoweredBy = require('hide-powered-by');
+const fs = require('fs');
+const https = require('https');
+app.use(hidePoweredBy());
 
 require('./server/config/passport')(passport);
 
-//echo "deb [arch = amd64, arm64] https://repo.mongodb.org/apt/ubuntu xenial / mongodb-org / 4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb.list
-//sudo apt install mongodb-org = 4.2.1 mongodb-org-server = 4.2.1 mongodb-org-shell = 4.2.1 mongodb-org-mongos = 4.2.1 mongodb-org-tools = 4.2.1
 
 const { url } = require('./server/config/database');
 
@@ -55,6 +55,15 @@ require('./server/routes/routes')(app, passport);
 
 app.use(express.static(path.join(__dirname,'client', 'public')));
 app.use(hidePoweredBy({ setTo: 'PHP 4.2.0' }))
-server.listen(app.get('port'), () => {
-    console.log('RED SOCIAL corriendo en http://localhost:8010/')
+
+https.createServer({
+	key: fs.readFileSync(path.join(__dirname, './keys/server.key')),
+	cert: fs.readFileSync(path.join(__dirname, './keys/server.cert')),
+	requestCert: true,
+	rejectUnauthorized: false,
+}, app).listen(app.get('port'), '0.0.0.0',() => {
+	console.log(app.get('port'));
 });
+/*server.listen(app.get('port'), () => {
+    console.log('RED SOCIAL corriendo en http://localhost:8010/')
+});*/
